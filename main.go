@@ -3,17 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	router := gin.Default()
 
-	con, err := pgx.Connect(context.Background(), "")
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: No .env file found")
+	}
+
+	con, err := pgx.Connect(context.Background(), os.Getenv(""))
 
 	if err != nil {
 		fmt.Println("Unable to connect to database", err)
